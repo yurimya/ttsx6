@@ -26,7 +26,7 @@ def goods_list(request, tid, pindex):
         # 查询：当前分类的所有商品，按每页15个来显示
         glist = t1.goodsinfo_set.order_by('-id')
         paginator = Paginator(glist, 15)
-        page = paginator.page(1) # 显示第一页
+
         pindex1 = int(pindex)
         if pindex1<1:
             pindex1=1
