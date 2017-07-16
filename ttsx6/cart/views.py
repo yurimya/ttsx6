@@ -69,7 +69,14 @@ def del1(request):
 
 def order(request):
     user = UserInfo.objects.get(pk=request.session.get('uid')) # 通过session中存储的uid，获取当前登录的用户
+<<<<<<< HEAD
     cart_ids = request.POST.getlist('cart_id') # 获取到选中的（会有很多的cart_id所以用getlist方法)， cart_id是键（就是name属性）
     cart_list = CartInfo.objects.filter(id__in=cart_ids) # 想要找到，需要在模板那边提交过来才能找到
     context = {'title': '提交订单', 'user': user, 'cart_list': cart_list}
+=======
+    cart_ids = request.POST.getlist('cart_id')  # [4,5,6]获取到选中的（会有很多的cart_id所以用getlist方法)， cart_id是键（就是name属性）
+    cart_list = CartInfo.objects.filter(id__in=cart_ids) # 想要找到，需要在模板那边提交过来才能找到
+    c_ids = ','.join(cart_ids)  # 4,5,6
+    context = {'title': '提交订单', 'user': user, 'cart_list': cart_list, 'c_ids': c_ids}
+>>>>>>> itcast
     return render(request, 'cart/order.html', context)

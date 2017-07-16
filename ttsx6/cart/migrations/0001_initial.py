@@ -7,8 +7,13 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
+<<<<<<< HEAD
         ('user', '0002_auto_20170711_2200'),
         ('goods', '0001_initial'),
+=======
+        ('goods', '0001_initial'),
+        ('user', '0001_initial'),
+>>>>>>> itcast
     ]
 
     operations = [
