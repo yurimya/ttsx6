@@ -6,5 +6,5 @@ def ss(func):
         if request.session.has_key('uid'):
             return func(request, *args, **kwargs)
         else:
-            return redirect('user/login')
+            return redirect('/user/login/')
     return func1

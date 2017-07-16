@@ -1,10 +1,12 @@
 # coding=utf-8
-from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.http import JsonResponse
+from django.shortcuts import render, redirect
 from models import *
 from hashlib import sha1
 import datetime
-from login_decorator import *
+from login_decorator import ss
+from goods.models import GoodsInfo
 # Create your views here.
 
 
@@ -62,9 +64,9 @@ def login_handle(request):
     context = {'title': '登录', 'uname': uname, 'upwd': upwd, 'top': '0'}
     # 根据用户名查询数据，如果未查到返回[]，如果查到则返回[UserInfo]
     users = UserInfo.objects.filter(uname=uname)
-    print users
-    print users[0]
-    print users[0].uname
+    # print users
+    # print users[0]
+    # print users[0].uname
     if len(users) == 0:
     # 用户名错误
         context['name_error'] = '1'
@@ -74,9 +76,10 @@ def login_handle(request):
             # 登陆成功
             # 记录当前登录的用户
             request.session['uid'] = users[0].id
+            print request.session['uid']
             request.session['uname'] = users[0].uname
             # 记住用户名
-            path = request.session.get('url_path')
+            path = request.session.get('url_path','/')
             response = redirect(path)
             if uname_jz == '1':
                 response.set_cookie('uname', uname, expires=datetime.datetime.now() + datetime.timedelta(days=7))
@@ -89,11 +92,19 @@ def login_handle(request):
             return render(request, 'user/login.html', context)
 
 
+
 @ss
 def center(request):
     user=UserInfo.objects.get(pk=request.session['uid'])
-    context={'title':'用户中心','user':user}
-    return render(request,'user/center.html',context)
+    # 查询最近浏览
+    gids = request.COOKIES.get('goods_ids', '').split(',') # 后面的'',是默认值
+    gids.pop()
+
+    glist =[]
+    for gid in gids:
+        glist.append(GoodsInfo.objects.get(id=gid))
+    context = {'title': '用户中心', 'user': user, 'glist': glist}
+    return render(request, 'user/center.html', context)
 
 
 @ss
@@ -115,3 +126,9 @@ def site(request):
     context = {'title': '收货地址', 'user': user}
     return render(request, 'user/site.html', context)
 
+
+def islogin(request):
+    result = 0
+    if request.session.has_key('uid'):
+        result = 1
+    return JsonResponse({'islogin1': result})
