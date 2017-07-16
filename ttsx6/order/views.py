@@ -1,8 +1,8 @@
-<<<<<<< HEAD
+# coding=utf-8
 from django.shortcuts import render
 
 # Create your views here.
-=======
+
 # coding=utf-8
 from datetime import datetime
 from django.shortcuts import render, redirect
@@ -120,4 +120,4 @@ def do_order(request):
         return redirect('/user/order/')
     else:
         return redirect('/cart/')
->>>>>>> itcast
+

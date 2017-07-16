@@ -7,7 +7,10 @@ from hashlib import sha1
 import datetime
 from login_decorator import ss
 from goods.models import GoodsInfo
+from order.models import *
+from django.core.paginator import Paginator
 # Create your views here.
+from order.models import OrderMain
 
 
 def register(request):
@@ -109,10 +112,26 @@ def center(request):
 
 @ss
 def order(request):
-    context={'title':'用户订单'}
-    return render(request,'user/order.html',context)
+    pindex = int(request.GET.get('pindex', '1'))
+    # 查询当前用户所有订单，并进行分页
+    uid = request.session.get('uid')
+    order_list = OrderMain.objects.filter(user_id=uid).order_by('-order_date')
+    paginator = Paginator(order_list, 2)
+    order_page = paginator.page(pindex)
 
+    # 页码
+    page_list = []
+    if paginator.num_pages < 5:
+        page_list = paginator.page_range
+    elif order_page.number <= 2:
+        page_list = range(1, 6)
+    elif order_page.number >= paginator.num_pages - 1:
+        page_list = range(paginator.num_pages - 4, paginator.num_pages + 1)
+    else:
+        page_list = range(pindex - 2, pindex + 3)
 
+    context = {'title': '用户订单', 'order_page': order_page, 'page_list': page_list}
+    return render(request, 'user/order.html', context)
 @ss
 def site(request):
     user = UserInfo.objects.get(pk=request.session['uid'])

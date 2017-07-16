@@ -77,20 +77,6 @@
 			<div class="total_pay">实付款：<b>52.60元</b></div>
 		</div>
 	</div>
-<<<<<<< HEAD
-
-	<div class="order_submit clearfix">
-		<a href="javascript:;" id="order_btn">提交订单</a>
-	</div>
-
-=======
-	<!--<form method="post" action="/order/">-->
-		<!--{%csrf_token%}-->
-		<!--<input type="hidden" name="cart_ids" value="{{c_ids}}">-->
-	<!--<div class="order_submit clearfix">-->
-		<!--<input type="submit" id="order_btn" value="提交订单">-->
-	<!--</div>-->
-	<!--</form>-->
 	<form method="post" action="/order/">
 	{% csrf_token %}
 		<input type="hidden" name="cart_ids" value="{{ c_ids }}">
@@ -98,5 +84,4 @@
 			<input type="submit" id="order_btn" value="提交订单">
 		</div>
 	</form>
->>>>>>> itcast
 {%endblock body%}
